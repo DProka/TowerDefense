@@ -6,55 +6,63 @@ public class Enemy : MonoBehaviour
 {
     public int health;
     public float speed;
-    public GameObject wayoint;
-    public GameObject body;
     public float lifeTime;
+    public GameObject body;
+    
+    private Transform target;
+    private EnemySpawner enemySpawner;
+    private int pointIndex = 0;
 
-    private float enemyX;
-    private float enemyY;
-    private float enemySpeed;
+    private void Start()
+    {
+        enemySpawner = EnemySpawner.enemySpawner;
+        target = WayPoints.points[0];
+    }
 
     void Update()
     {
-        lifeTime += Time.deltaTime;
-        Movement();
+        Vector2 dir = target.position - transform.position;
+        transform.Translate(dir.normalized * speed * Time.deltaTime, Space.World);
 
-        if (health <= 0 || transform.position.x < -12)
+        if(Vector2.Distance(transform.position, target.position) <= 0.1f)
+        {
+            transform.position = target.position;
+            GetNextWaypoint();
+            ChangeAngle();
+        }
+    }
+
+    void GetNextWaypoint()
+    {
+        if (pointIndex >= WayPoints.points.Length - 1)
         {
             Death();
+            return;
         }
+        
+        pointIndex++;
+        target = WayPoints.points[pointIndex]; 
     }
 
     public void ChangeAngle()
     {
+        if (transform.position.x < target.position.x)
+        body.transform.rotation = Quaternion.Euler(body.transform.rotation.x, body.transform.rotation.y, 0);
 
-    }
+        if (transform.position.x > target.position.x)
+        body.transform.rotation = Quaternion.Euler(body.transform.rotation.x, body.transform.rotation.y, 180);
 
-    public void Movement()
-    {
-        enemyX = transform.position.x;
-        enemyY = transform.position.y;
-        enemySpeed = speed * Time.deltaTime;
+        if (transform.position.y < target.position.y)
+        body.transform.rotation = Quaternion.Euler(body.transform.rotation.x, body.transform.rotation.y, 90);
 
-        if (enemyX < 5 && enemyY > -4)
-        {
-            transform.position = new Vector2(transform.position.x + enemySpeed, transform.position.y);
-        }
-        else if (enemyX >=5 && enemyY > -4)
-        {
-            transform.position = new Vector2(transform.position.x, transform.position.y - enemySpeed);
-            body.transform.rotation = Quaternion.Euler(body.transform.rotation.x, body.transform.rotation.y, -90);
-        }
-        else if (enemyY <= -4 && enemyX > -13)
-        {
-            transform.position = new Vector2(transform.position.x - enemySpeed, transform.position.y);
-            body.transform.rotation = Quaternion.Euler(body.transform.rotation.x, body.transform.rotation.y, -180);
-        }
-
+        if (transform.position.y > target.position.y)
+            body.transform.rotation = Quaternion.Euler(body.transform.rotation.x, body.transform.rotation.y, 270);
     }
 
     public void Death()
     {
         Destroy(gameObject);
+        enemySpawner.enemyAliveCounter--;
+        
     }
 }

@@ -4,30 +4,50 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    public float timeToSpawn;
+    public float timeBeforSpawn;
+    public float timeBetweenWaves;
+    public int enemyAliveCounter = 0;
     public GameObject enemy;
+    public Transform spawner;
+    public int[] waveCounter;
+    public static EnemySpawner enemySpawner;
 
-    private float spawn;
+    private int waveNumber = 0;
 
-    void Start()
+    private void Start()
     {
-        
+        enemySpawner = this;
     }
 
     void Update()
     {
-        spawn += Time.deltaTime;
-
-        if (spawn >= timeToSpawn)
+        if (enemyAliveCounter <= 0)
         {
-            EnemySpawn();
-        }
+            if (timeBeforSpawn <= 0)
+            {
+                StartCoroutine(WaveSpawn());
+                timeBeforSpawn = timeBetweenWaves;
+            }
 
+            timeBeforSpawn -= Time.deltaTime;
+        }
     }
 
-    public void EnemySpawn()
+    IEnumerator WaveSpawn()
     {
-        Instantiate(enemy, new Vector2(-10, 2), Quaternion.Euler(0,0,0));
-        spawn = 0;
+
+        for (int i = 0; i < waveCounter[waveNumber]; i++)
+        {
+            EnemySpawn();
+
+            yield return new WaitForSeconds(1f);
+        }
+        waveNumber++;
+    }
+
+    void EnemySpawn()
+    {
+        Instantiate(enemy, spawner.position, spawner.rotation);
+        enemyAliveCounter++;
     }
 }
