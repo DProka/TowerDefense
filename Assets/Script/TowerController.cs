@@ -4,14 +4,20 @@ using UnityEngine;
 
 public class TowerController : MonoBehaviour
 {
+    [Header("Attributes")]
+
     public int damage;
-    public int attackSpeed;
+    public float attackSpeed;
+
     public float range = 3f;
     public string enemyTag = "Enemy";
     public float rotationSpeed = 10f;
-    public Transform partToRotate; 
+    public Transform partToRotate;
+    public GameObject bullet;
+    public Transform firePoint;
     
     private Transform target;
+    private float fireCooldown;
 
     void Start()
     {
@@ -52,9 +58,22 @@ public class TowerController : MonoBehaviour
         }
 
         Vector2 dir = target.position - transform.position;
-        Quaternion lookRotation = Quaternion.LookRotation(dir);
-        Vector2 rotation = Quaternion.Lerp(partToRotate.rotation, lookRotation, Time.deltaTime * rotationSpeed).eulerAngles;
-        partToRotate.rotation = Quaternion.Euler(0f, 0f, -rotation.x);
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        Quaternion rotation = Quaternion.Euler(0f, 0f, angle);
+        partToRotate.rotation = Quaternion.Lerp(partToRotate.rotation, rotation, rotationSpeed * Time.deltaTime);
+
+        if(fireCooldown <=0)
+        {
+            Shoot();
+            fireCooldown = 1 / attackSpeed;
+        }
+
+        fireCooldown -= Time.deltaTime;
+    }
+
+    void Shoot()
+    {
+        Instantiate(bullet, firePoint.position, firePoint.rotation);
     }
 
     private void OnDrawGizmosSelected()

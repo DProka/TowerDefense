@@ -1574,6 +1574,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tower
       objectReference: {fileID: 0}
+    - target: {fileID: 3430214900551314792, guid: 48f882bfe5d57f14eb197ae393790f80, type: 3}
+      propertyPath: bullet
+      value: 
+      objectReference: {fileID: 4246820201723053597, guid: c3aed636e65a88041a50c5f699c1843f, type: 3}
+    - target: {fileID: 3430214900551314792, guid: 48f882bfe5d57f14eb197ae393790f80, type: 3}
+      propertyPath: rotationSpeed
+      value: 15
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 48f882bfe5d57f14eb197ae393790f80, type: 3}
 --- !u!1001 &8850607342829525729

@@ -166,7 +166,41 @@ MonoBehaviour:
   attackSpeed: 0
   range: 3
   enemyTag: Enemy
+  rotationSpeed: 10
   partToRotate: {fileID: 2343003611891085924}
+  bullet: {fileID: 4246820201723053597, guid: c3aed636e65a88041a50c5f699c1843f, type: 3}
+  firePoint: {fileID: 5605882556880168124}
+--- !u!1 &9196283680440277735
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5605882556880168124}
+  m_Layer: 0
+  m_Name: FirePoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5605882556880168124
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9196283680440277735}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.2, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2343003611963462936}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &7496452529724299101
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -287,5 +321,10 @@ PrefabInstance:
 --- !u!4 &2343003611891085924 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5227758346117981497, guid: 7f066823e15ef2f40a3b0738bcc56278, type: 3}
+  m_PrefabInstance: {fileID: 7496452529724299101}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &2343003611963462936 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5227758346039296581, guid: 7f066823e15ef2f40a3b0738bcc56278, type: 3}
   m_PrefabInstance: {fileID: 7496452529724299101}
   m_PrefabAsset: {fileID: 0}
