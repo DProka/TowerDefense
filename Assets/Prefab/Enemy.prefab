@@ -43,7 +43,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3686395865541976356}
   - component: {fileID: 5512776463132725897}
-  - component: {fileID: 1098108301}
   - component: {fileID: 1098108302}
   m_Layer: 0
   m_Name: Enemy
@@ -84,27 +83,6 @@ MonoBehaviour:
   speed: 2
   lifeTime: 0
   body: {fileID: 1997039241630795222}
---- !u!50 &1098108301
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2450893340116219859}
-  m_BodyType: 0
-  m_Simulated: 0
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
 --- !u!58 &1098108302
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -115,7 +93,7 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -277,7 +255,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
   m_Color: {r: 0.8490566, g: 0.03604484, b: 0.03604484, a: 1}
   m_FlipX: 0

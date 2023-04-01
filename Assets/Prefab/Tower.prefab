@@ -162,11 +162,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66fc723b3b21e114caf88f4df2c4f09d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 0
-  attackSpeed: 0
+  damage: 1
+  attackSpeed: 0.5
   range: 3
+  rotationSpeed: 15
   enemyTag: Enemy
-  rotationSpeed: 10
   partToRotate: {fileID: 2343003611891085924}
   bullet: {fileID: 4246820201723053597, guid: c3aed636e65a88041a50c5f699c1843f, type: 3}
   firePoint: {fileID: 5605882556880168124}

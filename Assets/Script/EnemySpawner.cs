@@ -11,8 +11,7 @@ public class EnemySpawner : MonoBehaviour
     public Transform spawner;
     public int[] waveCounter;
     public static EnemySpawner enemySpawner;
-
-    private int waveNumber = 0;
+    public int waveNumber = 0;
 
     private void Start()
     {
@@ -42,7 +41,9 @@ public class EnemySpawner : MonoBehaviour
 
             yield return new WaitForSeconds(1f);
         }
+
         waveNumber++;
+        GameController.gameController.AddWave();
     }
 
     void EnemySpawn()

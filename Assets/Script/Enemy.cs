@@ -11,12 +11,16 @@ public class Enemy : MonoBehaviour
     
     private Transform target;
     private EnemySpawner enemySpawner;
+    private GameController gameController;
     private int pointIndex = 0;
+
 
     private void Start()
     {
         enemySpawner = EnemySpawner.enemySpawner;
+        gameController = GameController.gameController;
         target = WayPoints.points[0];
+        health += enemySpawner.waveNumber;
     }
 
     void Update()
@@ -59,10 +63,21 @@ public class Enemy : MonoBehaviour
             body.transform.rotation = Quaternion.Euler(body.transform.rotation.x, body.transform.rotation.y, 270);
     }
 
+    public void TakeHit(int damage)
+    {
+        health -= damage;
+
+        if (health <= 0)
+        {
+            Death();
+        }
+    }
+
     public void Death()
     {
         Destroy(gameObject);
         enemySpawner.enemyAliveCounter--;
+        gameController.AddScore(true, 100);
         
     }
 }

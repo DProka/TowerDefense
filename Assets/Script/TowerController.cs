@@ -8,17 +8,19 @@ public class TowerController : MonoBehaviour
 
     public int damage;
     public float attackSpeed;
-
     public float range = 3f;
-    public string enemyTag = "Enemy";
     public float rotationSpeed = 10f;
+    public string enemyTag = "Enemy";
+
+    private float fireCooldown;
+    private Transform target;
+
+    [Header("Used Objects")]
+
     public Transform partToRotate;
     public GameObject bullet;
     public Transform firePoint;
     
-    private Transform target;
-    private float fireCooldown;
-
     void Start()
     {
         InvokeRepeating("UpdateTarget", 0f, 0.5f);
@@ -52,6 +54,8 @@ public class TowerController : MonoBehaviour
 
     void Update()
     {
+        fireCooldown += Time.deltaTime;
+
         if (target == null)
         {
             return;
@@ -62,18 +66,18 @@ public class TowerController : MonoBehaviour
         Quaternion rotation = Quaternion.Euler(0f, 0f, angle);
         partToRotate.rotation = Quaternion.Lerp(partToRotate.rotation, rotation, rotationSpeed * Time.deltaTime);
 
-        if(fireCooldown <=0)
+        if(fireCooldown >= attackSpeed)
         {
             Shoot();
-            fireCooldown = 1 / attackSpeed;
+            fireCooldown = 0;
         }
 
-        fireCooldown -= Time.deltaTime;
+        
     }
 
     void Shoot()
     {
-        Instantiate(bullet, firePoint.position, firePoint.rotation);
+        Instantiate(bullet, firePoint.position, partToRotate.rotation);
     }
 
     private void OnDrawGizmosSelected()
