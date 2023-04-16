@@ -7,36 +7,46 @@ public class Bullet : MonoBehaviour
     public float speed;
     public float lifetime;
     public int damage;
-    public string collisionTag;
-   
+    public CircleCollider2D bulletCollider;
+    public string status;
+    public float statusTimer;
 
-    void Start()
+    [HideInInspector]
+    public Enemy target;
+    
+    private void Update()
     {
-
+        GetEnemy();
     }
 
-    void Update()
+    public void GetEnemy()
     {
-        transform.Translate(Vector2.right * speed * Time.deltaTime);
-        lifetime -= Time.deltaTime;
-        
-        if (lifetime <= 0)
+        if (lifetime > 0 && target != null)
+        {
+            lifetime -= Time.deltaTime;
+
+            Vector2 direction = target.transform.position - transform.position;
+            transform.Translate(direction.normalized * speed * Time.deltaTime, Space.World);
+
+            float distanceToEnemy = Vector2.Distance(transform.position, target.transform.position);
+
+            if (distanceToEnemy <= bulletCollider.radius + target.enemyRadius)
+            {
+                target.TakeHit(damage);
+                target.GetStatus(status, statusTimer);
+                Destroy();
+            }
+        }
+
+        else
         {
             Destroy();
         }
     }
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        Enemy enemy = collision.GetComponent<Enemy>();
-        if (enemy != null)
-        {
-            enemy.TakeHit(damage);
-        }
-        Destroy();
-    }
-    
+
     public void Destroy()
     {
+        GameController.gameController.towerMissleArray.Remove(this);
         Destroy(gameObject);
     }
 }

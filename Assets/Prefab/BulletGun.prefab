@@ -9,11 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7795283649602948855}
-  - component: {fileID: 7764251283401623259}
+  - component: {fileID: -6387133382254614121}
   - component: {fileID: 5852098074660879856}
-  - component: {fileID: -3466031319635016439}
   m_Layer: 0
-  m_Name: TowerBullet
+  m_Name: BulletGun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -35,7 +34,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7764251283401623259
+--- !u!114 &-6387133382254614121
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -44,13 +43,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 4246820201723053597}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 342e4c4885ea93942b9d8580f0c48580, type: 3}
+  m_Script: {fileID: 11500000, guid: 2facf217599a3874398fed0f340d9e7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 4
-  lifetime: 5
+  speed: 7
+  lifetime: 4
   damage: 1
-  collisionTag: Enemy
+  bulletCollider: {fileID: 5852098074660879856}
+  target: {fileID: 0}
 --- !u!58 &5852098074660879856
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -67,27 +67,6 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.1
---- !u!50 &-3466031319635016439
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4246820201723053597}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 0
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 1
-  m_Constraints: 0
 --- !u!1 &6824613448581662496
 GameObject:
   m_ObjectHideFlags: 0

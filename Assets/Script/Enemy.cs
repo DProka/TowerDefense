@@ -4,23 +4,27 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    public int health;
+    public float health;
     public float speed;
     public float lifeTime;
     public GameObject body;
-    
+    public CircleCollider2D enemyCollider;
+    public float enemyRadius = 0f;
+
     private Transform target;
-    private EnemySpawner enemySpawner;
     private GameController gameController;
     private int pointIndex = 0;
-
-
+    private string enemyStatus;
+    private float statusTimer;
+    private float baseSpeed;
+    
     private void Start()
     {
-        enemySpawner = EnemySpawner.enemySpawner;
         gameController = GameController.gameController;
         target = WayPoints.points[0];
-        health += enemySpawner.waveNumber;
+        enemyRadius = enemyCollider.radius;
+        health += gameController.waveNumber; // * gameController.waveNumber;
+        baseSpeed = speed;
     }
 
     void Update()
@@ -34,6 +38,17 @@ public class Enemy : MonoBehaviour
             GetNextWaypoint();
             ChangeAngle();
         }
+
+        if (statusTimer > 0)
+        {
+            statusTimer -= Time.deltaTime;
+        }
+        else
+        {
+            statusTimer = 0;
+            enemyStatus = "None";
+            speed = baseSpeed;
+        } 
     }
 
     void GetNextWaypoint()
@@ -63,21 +78,43 @@ public class Enemy : MonoBehaviour
             body.transform.rotation = Quaternion.Euler(body.transform.rotation.x, body.transform.rotation.y, 270);
     }
 
-    public void TakeHit(int damage)
+    public void TakeHit(float damage)
     {
         health -= damage;
-
+        
         if (health <= 0)
         {
             Death();
         }
     }
 
+    public void GetStatus(string status, float timer)
+    {
+        if (enemyStatus == "None")
+        {
+            enemyStatus = status;
+            statusTimer = timer;
+            SetStatus();
+        }
+    }
+
+    public void SetStatus()
+    {
+        if (enemyStatus == "Freeze")
+        {
+            speed *= 0.3f;
+        }
+    }
+
     public void Death()
     {
+        if (health <= 0)
+        {
+            gameController.AddScore(100);
+        }
+
+        gameController.enemyArray.Remove(this);
+        gameController.enemyAliveCounter--;
         Destroy(gameObject);
-        enemySpawner.enemyAliveCounter--;
-        gameController.AddScore(true, 100);
-        
     }
 }

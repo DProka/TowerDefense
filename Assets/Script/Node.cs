@@ -6,36 +6,50 @@ public class Node : MonoBehaviour
 {
     public Color hoverColor;
     public SpriteRenderer rend;
-    public GameObject tower;
+    public GameObject towerGunPrefab;
+    public GameObject towerLaserPrefab;
+    public GameObject towerIcePrefab;
 
     private Color startColor;
     private bool active;
+    private bool employed;
     
 
     void Start()
     {
         startColor = rend.color;
-        active = false;   
+        active = false;
+        employed = false;
     }
     private void Update()
     {
         if (active == true && Input.GetMouseButtonDown(0))
         {
-            TowerCreation();
+            TowerCreation(towerGunPrefab);
+        }
+        
+        if (active == true && Input.GetMouseButtonDown(1))
+        {
+            TowerCreation(towerLaserPrefab);
+        }
+        
+        if (active == true && Input.GetMouseButtonDown(2))
+        {
+            TowerCreation(towerIcePrefab);
         }
     }
 
-    void TowerCreation()
+    void TowerCreation(GameObject tower)
     {
         int towerCost = GameController.gameController.towerCost;
         int pScore = GameController.gameController.score;
 
-        if (pScore >= towerCost)
+        if (pScore >= towerCost && !employed)
         {
             Instantiate(tower, transform.position, transform.rotation);
-            GameController.gameController.AddScore(false, towerCost);
+            GameController.gameController.AddScore(-towerCost);
             GameController.gameController.TowerCost();
-            
+            employed = true;
         }
         
     }
