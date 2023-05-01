@@ -48,7 +48,7 @@ public class Node : MonoBehaviour
         {
             Instantiate(tower, transform.position, transform.rotation);
             GameController.gameController.AddScore(-towerCost);
-            GameController.gameController.TowerCost();
+            GameController.gameController.UpdateTowerCost();
             employed = true;
         }
         

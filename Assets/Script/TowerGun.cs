@@ -22,7 +22,7 @@ public class TowerGun : Tower
 
         fireCooldown += Time.deltaTime;
 
-        if (fireCooldown >= attackSpeed)
+        if (fireCooldown >= attackSpeed && target.health > 0)
         {
             Shoot();
             fireCooldown = 0;

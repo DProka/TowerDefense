@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Bullet : MonoBehaviour
@@ -8,7 +6,7 @@ public class Bullet : MonoBehaviour
     public float lifetime;
     public int damage;
     public CircleCollider2D bulletCollider;
-    public string status;
+    public EnemyStatus status;
     public float statusTimer;
 
     [HideInInspector]
@@ -21,7 +19,7 @@ public class Bullet : MonoBehaviour
 
     public void GetEnemy()
     {
-        if (lifetime > 0 && target != null)
+        if (lifetime > 0 && target != null && target.health > 0)
         {
             lifetime -= Time.deltaTime;
 

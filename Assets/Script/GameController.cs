@@ -2,47 +2,65 @@ using TMPro;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
+using System;
+
 
 public class GameController : MonoBehaviour
 {
     [Header("Game Controller")]
     
     public int score;
-    public TextMeshProUGUI uiScore;
-    public TextMeshProUGUI waveNumberText;
-    public TextMeshProUGUI towerScore;
     public int towerCost = 100;
+    public int playerHealth = 3;
     public static GameController gameController;
+
+    [Header("UI")]
+
+    public Image life1; 
+    public Image life2; 
+    public Image life3;
+    public TextMeshProUGUI uiScore;
+    public TextMeshProUGUI towerPrice;
+    public GameObject failScreen;
+    public GameObject victoryScreen;
+    public Button restartButton;
+    public Button menuButton;
 
     [Header("EnemySpawn Controller")]
 
-    public GameObject enemySPrefab;
-    public GameObject enemyMPrefab;
-    public GameObject enemyLPrefab;
+    public GameObject enemyPrefab;
     public Transform spawner;
     public float timeBeforSpawn;
     public float timeBetweenWaves;
     public float timeBetweenEnemyspawn;
     public int waveNumber = 0;
-    public int enemyAliveCounter = 0;
     public int[] waveCounter;
+
+    [HideInInspector]
+    public bool gameIsActive;
+    public int enemyAliveCounter = 0;
     public List<Enemy> enemyArray = new List<Enemy>();
+    public List<Bullet> towerMissleArray = new List<Bullet>();
+    public event Action<int> OnWaveChange;
 
     private float waveTimer;
 
-    public List<Bullet> towerMissleArray = new List<Bullet>();
-
-    void Start()
+    void Awake()
     {
+        gameIsActive = true;
         gameController = this;
+        failScreen.SetActive(false);
         uiScore.text = score.ToString() + " Score";
-        towerScore.text = towerCost.ToString() + " Cost";
+        towerPrice.text = towerCost.ToString() + " Cost";
         waveTimer = timeBetweenWaves;
+        restartButton.onClick.AddListener(RestartGame);
+        menuButton.onClick.AddListener(GoToMenu);
     }
+
     void Update()
     {
-
-        if (enemyArray.Count == 0)
+        if (enemyArray.Count == 0 && gameIsActive != false)
         {
             if (waveTimer > 0)
             {
@@ -51,11 +69,19 @@ public class GameController : MonoBehaviour
 
             if (waveTimer <= 0)
             {
-                if (waveNumber >= waveCounter.Length - 1)
+                AddWave();
+               
+                if (waveNumber < waveCounter.Length)
+                {
+                    StartCoroutine(WaveSpawn());
+                    waveTimer = timeBetweenWaves;
+                }
+                else
+                {
                     waveNumber = 10;
-
-                StartCoroutine(WaveSpawn());
-                waveTimer = timeBetweenWaves;
+                    victoryScreen.SetActive(true);
+                    gameIsActive = false;
+                }
             }
         }
     }
@@ -66,28 +92,30 @@ public class GameController : MonoBehaviour
         {
             if(i <= 10)
             {
-                EnemySpawn(enemySPrefab);
+                EnemySpawn(1);
             }
             
             if(i > 10 && i < 21)
             {
-                EnemySpawn(enemyMPrefab);
+                EnemySpawn(2);
             }
             
             if(i >= 21)
             {
-                EnemySpawn(enemyLPrefab);
+                EnemySpawn(3);
             }
             
             yield return new WaitForSeconds(timeBetweenEnemyspawn);
         }
-
-        AddWave();
+        waveNumber++;
+        //AddWave();
     }
 
-    void EnemySpawn(GameObject enemy)
+    void EnemySpawn(int enemySize)
     {
-        Enemy g = Instantiate(enemy, spawner.position, spawner.rotation).GetComponent<Enemy>();
+        GameObject e = Instantiate(enemyPrefab, spawner.position, spawner.rotation);
+        Enemy g = e.GetComponent<Enemy>();
+        g.enemySize = enemySize;
         enemyArray.Add(g);
         enemyAliveCounter++;
     }
@@ -101,16 +129,15 @@ public class GameController : MonoBehaviour
 
     public void AddWave()
     {
-       
-     
-        waveNumber++;
-        waveNumberText.text = waveNumber.ToString() + " Wave";
+        if (OnWaveChange != null)
+            OnWaveChange.Invoke(waveNumber);
+           // OnWaveChange?.Invoke(waveNumber);
     }
 
-    public void TowerCost()
+    public void UpdateTowerCost()
     {
         towerCost += 100;
-        towerScore.text = towerCost.ToString() + " Cost";
+        towerPrice.text = towerCost.ToString() + " Cost";
     }
 
     public Enemy GetNearestEnemy(Vector2 point)
@@ -129,4 +156,33 @@ public class GameController : MonoBehaviour
 
         return nearestEnemy;
     }
+
+    public void UpdatePlayerHealthStatus()
+    {
+        if (playerHealth > 0)
+            gameController.playerHealth -= 1;
+
+        if (playerHealth == 2)
+            life3.enabled = false;
+        
+        if(playerHealth == 1)
+            life2.enabled = false;
+        
+        if(playerHealth == 0)
+        {
+            failScreen.SetActive(true);
+            gameIsActive = false;
+            life1.enabled = false;
+        }
+    }
+
+    public void RestartGame()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene(1);
+    }
+    
+    public void GoToMenu()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+    } 
 }
