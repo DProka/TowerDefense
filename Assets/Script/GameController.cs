@@ -60,7 +60,7 @@ public class GameController : MonoBehaviour
 
     void Update()
     {
-        if (enemyArray.Count == 0 && gameIsActive != false)
+        if (enemyArray.Count <= 0 && gameIsActive)
         {
             if (waveTimer > 0)
             {

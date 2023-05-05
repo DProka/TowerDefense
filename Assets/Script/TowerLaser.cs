@@ -20,14 +20,14 @@ public class TowerLaser : Tower
 
     protected override void UpdateTower()
     {
-        if (target == null)
+        if (target == null || target.health <= 0)
         {
             lineRenderer.enabled = false;
             return;
         }
         
         fireTimer -= Time.deltaTime;
-
+        
         if (fireTimer <= 0 && target.health > 0)
         {
             target.TakeHit(damage * Time.deltaTime);

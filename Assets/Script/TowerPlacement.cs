@@ -9,16 +9,14 @@ public class TowerPlacement : MonoBehaviour
     public Tilemap tilemap;
     public Tile usedTile;
 
-    private Vector3 mousePosition;
     private Vector3Int mousePositionInt32;
     private bool isPlaceFree = false;
     private CursorSettings cursor;
 
     [Header("Cursor Settings")]
 
-    public GameObject cursorPrefab;
+    public CursorSettings cursorPrefab;
 
-    private GameObject cursorMid;
     private bool cursorMenuActive;
 
     [Header("Towers")]
@@ -30,9 +28,8 @@ public class TowerPlacement : MonoBehaviour
 
 
     private void Start()
-    {
-        cursorPrefab = Instantiate(cursorPrefab, new Vector3(0, 0, 0), transform.rotation);
-        cursor = cursorPrefab.GetComponent<CursorSettings>();
+    { 
+        cursor = Instantiate(cursorPrefab, new Vector3(0, 0, 0), transform.rotation);
         cursorMenuActive = false;
         cursor.towerGunButton.onClick.AddListener(delegate { CreateTower(towerGunPrefab); });
         cursor.towerLaserButton.onClick.AddListener(delegate { CreateTower(towerLaserPrefab); });
@@ -41,29 +38,25 @@ public class TowerPlacement : MonoBehaviour
 
     void Update()
     {
-        mousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+        Vector3 mousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+        mousePosition.z = 0;
 
-        if (GameController.gameController.gameIsActive != false && cursorMenuActive != true)
+        if (GameController.gameController.gameIsActive && !cursorMenuActive)
         {
             mousePositionInt32 = ConvertMousepositionToInt(mousePosition.x, mousePosition.y);
             UpdateCursor();
         }
 
         float dist = Vector3.Distance(mousePosition, cursor.cursorMid.position);
+        Debug.Log(dist);
 
-        if(dist > 10.07)
-        {
-            cursorMenuActive = false;
-            cursor.CallCursorMenu(cursorMenuActive);
-        }
-
-        if (Input.GetMouseButtonDown(0) && isPlaceFree != false)
+        if (Input.GetMouseButtonDown(0) && isPlaceFree)
         {
             cursorMenuActive = true;
             cursor.CallCursorMenu(cursorMenuActive);
         }
 
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButtonDown(1) || dist > 1.5f)
         {
             cursorMenuActive = false;
             cursor.CallCursorMenu(cursorMenuActive);
@@ -72,21 +65,13 @@ public class TowerPlacement : MonoBehaviour
 
     void UpdateCursor()
     {
-        if (cursorPrefab == null)
+        if (cursor == null)
             return;
 
-        cursorPrefab.transform.position = mousePositionInt32;
+        cursor.transform.position = mousePositionInt32;
 
-        if (tilemap.GetSprite(mousePositionInt32) == null)
-        {
-            isPlaceFree = true;
-            cursor.ChangeCursorImage(isPlaceFree);
-        }
-        else
-        {
-            isPlaceFree = false;
-            cursor.ChangeCursorImage(isPlaceFree);
-        }
+        isPlaceFree = tilemap.GetTile(mousePositionInt32) == null;
+        cursor.ChangeCursorImage(isPlaceFree);
     }
 
     void CreateTower(GameObject tower)

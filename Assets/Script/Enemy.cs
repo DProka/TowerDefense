@@ -114,17 +114,9 @@ public class Enemy : MonoBehaviour
 
     public void ChangeAngle()
     {
-        if (transform.position.x < target.position.x)
-        body.transform.rotation = Quaternion.Euler(body.transform.rotation.x, body.transform.rotation.y, 0);
-
-        if (transform.position.x > target.position.x)
-        body.transform.rotation = Quaternion.Euler(body.transform.rotation.x, body.transform.rotation.y, 180);
-
-        if (transform.position.y < target.position.y)
-        body.transform.rotation = Quaternion.Euler(body.transform.rotation.x, body.transform.rotation.y, 90);
-
-        if (transform.position.y > target.position.y)
-            body.transform.rotation = Quaternion.Euler(body.transform.rotation.x, body.transform.rotation.y, 270);
+        Vector2 dir = target.position - transform.position;
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        body.transform.rotation = Quaternion.Euler(0, 0, angle);
     }
 
     public void TakeHit(float damage)
